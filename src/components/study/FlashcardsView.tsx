@@ -22,9 +22,11 @@ export function FlashcardsView({ data, onTryAnother }: FlashcardsViewProps) {
   const [known, setKnown] = useState<boolean[]>([]);
   const [wrong, setWrong] = useState<Flashcard[]>([]);
   const [done, setDone] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const card = queue[current];
   const total = queue.length;
+  const progress = current / total;
 
   function answer(correct: boolean) {
     if (!flipped) { setFlipped(true); return; }
@@ -45,7 +47,9 @@ export function FlashcardsView({ data, onTryAnother }: FlashcardsViewProps) {
     }
   }
 
-  function restart() { setQueue(cards); setCurrent(0); setFlipped(false); setKnown([]); setWrong([]); setDone(false); }
+  function restart() {
+    setQueue(cards); setCurrent(0); setFlipped(false); setKnown([]); setWrong([]); setDone(false);
+  }
 
   if (done) {
     const correctCount = known.filter(Boolean).length;
@@ -71,7 +75,6 @@ export function FlashcardsView({ data, onTryAnother }: FlashcardsViewProps) {
           <button onClick={restart} className="flex-1 py-3 rounded-xl bg-zinc-800 font-bold text-sm flex items-center justify-center gap-2"><RotateCcw size={16} />Try again</button>
           <button onClick={onTryAnother} className="flex-1 py-3 rounded-xl btn-purple text-white font-bold text-sm">New format</button>
         </div>
-        <p className="text-zinc-700 text-xs mt-6">made with Lockd.AI 🔒</p>
       </div>
     );
   }
@@ -83,18 +86,16 @@ export function FlashcardsView({ data, onTryAnother }: FlashcardsViewProps) {
         <div className="flex items-center gap-2"><span className="text-lg">🃏</span><span className="font-bold text-green-400">Flashcards</span></div>
         <button className="text-zinc-400"><Share2 size={18} /></button>
       </div>
-
       <div className="px-4 mb-6">
         <div className="flex items-center gap-2 mb-1">
           <div className="flex-1 h-2 bg-zinc-800 rounded-full overflow-hidden">
-            <div className="h-full bg-green-500 rounded-full transition-all duration-300" style={{ width: `${(current / total) * 100}%` }} />
+            <div className="h-full bg-green-500 rounded-full transition-all duration-300" style={{ width: `${progress * 100}%` }} />
           </div>
           <span className="text-xs text-zinc-500 font-mono">{current + 1}/{total}</span>
         </div>
       </div>
-
       <div className="flex-1 px-4 flex flex-col items-center pb-32">
-        <div className="w-full max-w-sm perspective-1000 cursor-pointer" style={{ height: "55vw", maxHeight: 300 }} onClick={() => setFlipped(f => !f)}>
+        <div ref={cardRef} className="w-full max-w-sm perspective-1000 cursor-pointer" style={{ height: "55vw", maxHeight: 300 }} onClick={() => setFlipped(f => !f)}>
           <div className="w-full h-full preserve-3d transition-all duration-500 relative" style={{ transform: flipped ? "rotateY(180deg)" : "rotateY(0)" }}>
             <div className="absolute inset-0 backface-hidden rounded-3xl bg-zinc-900 border border-zinc-700 flex flex-col items-center justify-center p-6 text-center">
               <p className="text-xs text-zinc-500 font-bold uppercase tracking-wider mb-4">QUESTION</p>
@@ -107,7 +108,6 @@ export function FlashcardsView({ data, onTryAnother }: FlashcardsViewProps) {
             </div>
           </div>
         </div>
-
         <div className="flex gap-4 mt-6 w-full max-w-sm">
           <button onClick={() => answer(false)} className="flex-1 py-4 rounded-2xl bg-red-950/50 border border-red-800/50 flex items-center justify-center gap-2 text-red-400 font-bold active:scale-[0.97] transition-all">
             <X size={20} />{flipped ? "Missed it" : "Skip"}
@@ -116,9 +116,7 @@ export function FlashcardsView({ data, onTryAnother }: FlashcardsViewProps) {
             <Check size={20} />{flipped ? "Got it!" : "Flip"}
           </button>
         </div>
-        <p className="text-zinc-600 text-xs mt-4 text-center">{flipped ? "Did you know it?" : "Tap card to reveal answer"}</p>
       </div>
-
       <TryAnotherBar onTryAnother={onTryAnother} />
     </div>
   );

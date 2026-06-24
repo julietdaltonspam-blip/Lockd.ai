@@ -15,6 +15,7 @@ interface GossipViewProps {
 
 export function GossipView({ data, onTryAnother }: GossipViewProps) {
   const router = useRouter();
+  const chatRef = useRef<HTMLDivElement>(null);
 
   async function handleShare() {
     if (navigator.share) {
@@ -40,7 +41,7 @@ export function GossipView({ data, onTryAnother }: GossipViewProps) {
         </button>
       </div>
 
-      <div className="px-4 py-4 space-y-3 max-w-lg mx-auto">
+      <div ref={chatRef} className="px-4 py-4 space-y-3 max-w-lg mx-auto">
         {data.messages?.map((msg, i) => {
           const isMia = msg.speaker === "Mia";
           return (
@@ -51,7 +52,7 @@ export function GossipView({ data, onTryAnother }: GossipViewProps) {
               >
                 <span style={{ color: isMia ? "#ec4899" : "#a855f7" }}>{msg.speaker[0]}</span>
               </div>
-              <div className={`max-w-[78%]`}>
+              <div className="max-w-[78%]">
                 <p className="text-xs font-bold mb-1" style={{ color: isMia ? "#ec4899" : "#a855f7" }}>{msg.speaker}</p>
                 <div
                   className="rounded-2xl px-4 py-2.5 text-sm leading-relaxed"

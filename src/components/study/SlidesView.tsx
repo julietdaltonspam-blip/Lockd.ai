@@ -24,13 +24,9 @@ export function SlidesView({ data, onTryAnother }: SlidesViewProps) {
     <div className="min-h-screen bg-zinc-950 flex flex-col">
       <div className="px-4 pt-12 pb-3 flex items-center justify-between">
         <button onClick={() => router.back()} className="text-zinc-400"><ArrowLeft size={18} /></button>
-        <div className="flex items-center gap-2">
-          <span className="text-lg">📱</span>
-          <span className="font-bold text-blue-400">Slides Mode</span>
-        </div>
+        <div className="flex items-center gap-2"><span className="text-lg">📱</span><span className="font-bold text-blue-400">Slides Mode</span></div>
         <button className="text-zinc-400"><Share2 size={18} /></button>
       </div>
-
       <div className="px-4 mb-4">
         <div className="flex items-center gap-2 mb-1">
           <div className="flex-1 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
@@ -44,10 +40,9 @@ export function SlidesView({ data, onTryAnother }: SlidesViewProps) {
           ))}
         </div>
       </div>
-
       <div className="flex-1 px-4 pb-32">
         {slide && (
-          <div className="w-full min-h-[60vh] rounded-2xl bg-zinc-900 border border-zinc-700 p-6 flex flex-col">
+          <div className="w-full min-h-[60vh] rounded-2xl bg-zinc-900 border border-zinc-700 p-6 flex flex-col" key={current}>
             <div className="flex items-center justify-between mb-4">
               <span className="text-xs text-blue-500 font-bold uppercase tracking-wider">Slide {current + 1}</span>
               <div className="w-8 h-1 bg-blue-500 rounded-full" />
@@ -72,17 +67,15 @@ export function SlidesView({ data, onTryAnother }: SlidesViewProps) {
             </div>
           </div>
         )}
-
         <div className="flex gap-3 mt-4">
-          <button onClick={() => setCurrent(c => c - 1)} disabled={current === 0} className="flex-1 py-3 rounded-xl bg-zinc-900 border border-zinc-700 flex items-center justify-center gap-2 text-zinc-300 font-medium text-sm disabled:opacity-30 active:scale-[0.98] transition-all">
+          <button onClick={() => setCurrent(c => c - 1)} disabled={current === 0} className="flex-1 py-3 rounded-xl bg-zinc-900 border border-zinc-700 flex items-center justify-center gap-2 text-zinc-300 font-medium text-sm disabled:opacity-30">
             <ChevronLeft size={18} />Previous
           </button>
-          <button onClick={() => setCurrent(c => c + 1)} disabled={current === total - 1} className="flex-1 py-3 rounded-xl bg-blue-900/50 border border-blue-700/50 flex items-center justify-center gap-2 text-blue-200 font-medium text-sm disabled:opacity-30 active:scale-[0.98] transition-all">
+          <button onClick={() => setCurrent(c => c + 1)} disabled={current === total - 1} className="flex-1 py-3 rounded-xl bg-blue-900/50 border border-blue-700/50 flex items-center justify-center gap-2 text-blue-200 font-medium text-sm disabled:opacity-30">
             Next<ChevronRight size={18} />
           </button>
         </div>
       </div>
-
       <TryAnotherBar onTryAnother={onTryAnother} />
     </div>
   );

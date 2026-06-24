@@ -13,20 +13,14 @@ const FORMATS = [
     border: "border-pink-800/40 hover:border-pink-600",
     preview: (
       <div className="space-y-1 text-xs">
-        <div className="flex gap-1">
-          <span className="text-pink-400 font-bold">Mia:</span>
-          <span className="text-zinc-300">omg did u hear about mitosis??</span>
-        </div>
-        <div className="flex gap-1">
-          <span className="text-purple-400 font-bold">Zoe:</span>
-          <span className="text-zinc-300">no spill!!! 👀</span>
-        </div>
+        <div className="flex gap-1"><span className="text-pink-400 font-bold">Mia:</span><span className="text-zinc-300">omg did u hear about mitosis??</span></div>
+        <div className="flex gap-1"><span className="text-purple-400 font-bold">Zoe:</span><span className="text-zinc-300">no spill!!! 👀</span></div>
       </div>
     ),
   },
   {
     id: "podcast" as OutputFormat,
-    emoji: "🎤",
+    emoji: "🎙️",
     label: "Podcast Mode",
     tagline: "chill lo-fi breakdown",
     color: "#f59e0b",
@@ -34,18 +28,7 @@ const FORMATS = [
     border: "border-amber-800/40 hover:border-amber-600",
     preview: (
       <div className="space-y-1 text-xs">
-        <div className="flex gap-1">
-          <span className="text-amber-400 font-bold">Alex:</span>
-          <span className="text-zinc-300">So today we're diving into...</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="flex gap-0.5">
-            {[2,4,3,5,2,4,3].map((h,i) => (
-              <div key={i} className="w-0.5 bg-amber-500 rounded-full" style={{ height: h * 3 }} />
-            ))}
-          </div>
-          <span className="text-zinc-500 text-[10px]">0:00</span>
-        </div>
+        <div className="flex gap-1"><span className="text-amber-400 font-bold">Alex:</span><span className="text-zinc-300">So today we're diving into...</span></div>
       </div>
     ),
   },
@@ -62,7 +45,6 @@ const FORMATS = [
         <div className="h-2 bg-blue-500/60 rounded w-3/4" />
         <div className="h-1 bg-zinc-600 rounded w-full" />
         <div className="h-1 bg-zinc-600 rounded w-5/6" />
-        <div className="h-1 bg-zinc-600 rounded w-4/5" />
       </div>
     ),
   },
@@ -76,9 +58,7 @@ const FORMATS = [
     border: "border-green-800/40 hover:border-green-600",
     preview: (
       <div className="flex items-center justify-center">
-        <div className="w-16 h-10 rounded-lg border border-green-700/50 bg-green-950/30 flex items-center justify-center text-[10px] text-green-300 font-medium">
-          Q: What is...
-        </div>
+        <div className="w-16 h-10 rounded-lg border border-green-700/50 bg-green-950/30 flex items-center justify-center text-[10px] text-green-300 font-medium">Q: What is...</div>
       </div>
     ),
   },
@@ -93,14 +73,7 @@ const FORMATS = [
     preview: (
       <div className="space-y-1 text-xs">
         <div className="text-purple-400 font-bold text-[10px]">KEY CONCEPTS</div>
-        <div className="flex items-center gap-1">
-          <div className="w-1 h-1 rounded-full bg-purple-400" />
-          <div className="h-1 bg-zinc-600 rounded w-3/4" />
-        </div>
-        <div className="flex items-center gap-1">
-          <div className="w-1 h-1 rounded-full bg-purple-400" />
-          <div className="h-1 bg-zinc-600 rounded w-2/3" />
-        </div>
+        <div className="flex items-center gap-1"><div className="w-1 h-1 rounded-full bg-purple-400" /><div className="h-1 bg-zinc-600 rounded w-3/4" /></div>
       </div>
     ),
   },
@@ -117,7 +90,6 @@ export function FormatPicker({ onSelect }: FormatPickerProps) {
         <h1 className="text-2xl font-black mb-1">How do you want to study? ✨</h1>
         <p className="text-zinc-400 text-sm">Pick a format — your content is ready to go.</p>
       </div>
-
       <div className="space-y-3">
         {FORMATS.map(f => (
           <button
@@ -132,9 +104,7 @@ export function FormatPicker({ onSelect }: FormatPickerProps) {
                   <p className="font-black text-base" style={{ color: f.color }}>{f.label}</p>
                   <span className="text-zinc-500 text-xs italic">{f.tagline}</span>
                 </div>
-                <div className="mt-2 p-2 rounded-lg bg-black/20">
-                  {f.preview}
-                </div>
+                <div className="mt-2 p-2 rounded-lg bg-black/20">{f.preview}</div>
               </div>
             </div>
           </button>

@@ -19,7 +19,10 @@ export function NotesView({ data, onTryAnother }: NotesViewProps) {
     <div className="min-h-screen bg-zinc-950 pb-32">
       <div className="sticky top-0 z-30 glass border-b border-zinc-800 px-4 py-3 flex items-center justify-between">
         <button onClick={() => router.back()} className="text-zinc-400"><ArrowLeft size={18} /></button>
-        <div className="flex items-center gap-2"><span className="text-lg">📝</span><span className="font-bold text-purple-400">Notes</span></div>
+        <div className="flex items-center gap-2">
+          <span className="text-lg">📝</span>
+          <span className="font-bold text-purple-400">Notes</span>
+        </div>
         <button className="text-zinc-400"><Share2 size={18} /></button>
       </div>
 
@@ -31,7 +34,9 @@ export function NotesView({ data, onTryAnother }: NotesViewProps) {
             <h2 className="text-xs font-black text-purple-400 uppercase tracking-widest mb-3">Key Concepts</h2>
             <div className="flex flex-wrap gap-2">
               {data.keyConcepts.map((concept, i) => (
-                <span key={i} className="px-3 py-1.5 rounded-full bg-purple-950/50 border border-purple-800/50 text-purple-200 text-sm font-medium">{concept}</span>
+                <span key={i} className="px-3 py-1.5 rounded-full bg-purple-950/50 border border-purple-800/50 text-purple-200 text-sm font-medium">
+                  {concept}
+                </span>
               ))}
             </div>
           </div>
@@ -50,14 +55,17 @@ export function NotesView({ data, onTryAnother }: NotesViewProps) {
             <ul className="space-y-2">
               {data.takeaways.map((t, i) => (
                 <li key={i} className="flex gap-3 items-start text-sm text-zinc-300">
-                  <span className="text-purple-400 font-black flex-shrink-0 mt-0.5">{i + 1}.</span>{t}
+                  <span className="text-purple-400 font-black flex-shrink-0 mt-0.5">{i + 1}.</span>
+                  {t}
                 </li>
               ))}
             </ul>
           </div>
         )}
 
-        <div className="text-center py-4"><p className="text-zinc-700 text-xs">made with Lockd.AI 🔒</p></div>
+        <div className="text-center py-4">
+          <p className="text-zinc-700 text-xs">made with Lockd.AI 🔒</p>
+        </div>
       </div>
 
       <TryAnotherBar onTryAnother={onTryAnother} />

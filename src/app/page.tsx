@@ -48,7 +48,7 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
           <Logo size="sm" />
           <button
-            onClick={() => signIn("google")}
+            onClick={() => signIn("google", { callbackUrl: "/home" })}
             className="px-4 py-2 rounded-full bg-zinc-800 hover:bg-zinc-700 text-sm font-medium transition-colors"
           >
             Sign in
@@ -84,7 +84,7 @@ export default function LandingPage() {
           </p>
 
           <button
-            onClick={() => signIn("google")}
+            onClick={() => signIn("google", { callbackUrl: "/home" })}
             className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl btn-purple text-white font-bold text-lg shadow-2xl shadow-purple-900/40 mb-4 transition-all hover:scale-105 active:scale-95"
           >
             Get Started Free
@@ -192,7 +192,7 @@ export default function LandingPage() {
             <h2 className="text-2xl font-black mb-2">Ready to lock in?</h2>
             <p className="text-zinc-400 text-sm mb-6">Start studying smarter in seconds.</p>
             <button
-              onClick={() => signIn("google")}
+              onClick={() => signIn("google", { callbackUrl: "/home" })}
               className="w-full py-4 rounded-2xl btn-purple text-white font-bold text-base flex items-center justify-center gap-2"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">

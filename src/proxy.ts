@@ -21,11 +21,6 @@ export async function proxy(req: NextRequest) {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
-  // Redirect unonboarded users to onboarding before /home
-  if (!token.onboarded && pathname !== "/onboarding" && pathname.startsWith("/home")) {
-    return NextResponse.redirect(new URL("/onboarding", req.url));
-  }
-
   return NextResponse.next();
 }
 

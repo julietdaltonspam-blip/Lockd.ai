@@ -5,17 +5,6 @@ import { supabase } from "@/lib/supabase";
 import { createFolder } from "@/lib/db";
 import { FOLDER_COLORS } from "@/types";
 
-function getSubjectEmoji(subject: string): string {
-  const map: Record<string, string> = {
-    "AP Biology": "🧬", "AP Chemistry": "⚗️", "AP Physics": "⚡",
-    "AP Psychology": "🧠", "AP Statistics": "📊", "AP Calculus": "∫",
-    "AP History": "🏛️", "AP English": "📖", "AP Economics": "📈",
-    "College Math": "📐", "College Science": "🔬", "College Humanities": "🎭",
-    "Business": "💼", "Law": "⚖️", "Medicine": "🩺", "Other": "📚",
-  };
-  return map[subject] || "📚";
-}
-
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -29,6 +18,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Onboard error:", error);
-    return NextResponse.json({ error: "Failed" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to save" }, { status: 500 });
   }
+}
+
+function getSubjectEmoji(subject: string): string {
+  const map: Record<string, string> = {
+    "AP Biology": "🧬", "AP Chemistry": "⚗️", "AP Physics": "⚡", "AP Psychology": "🧠",
+    "AP Statistics": "📊", "AP Calculus": "∫", "AP History": "🏙️", "AP English": "📖",
+    "AP Economics": "📈", "College Math": "📐", "College Science": "🔬", "College Humanities": "🎤",
+    "Business": "💼", "Law": "⚖️", "Medicine": "🩺", "Other": "📚",
+  };
+  return map[subject] || "📚";
 }

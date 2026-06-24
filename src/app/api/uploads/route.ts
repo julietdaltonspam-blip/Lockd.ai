@@ -10,6 +10,6 @@ export async function GET(req: NextRequest) {
   const folderId = searchParams.get("folderId") || undefined;
   const limit = parseInt(searchParams.get("limit") || "20");
   let uploads = await getUploads(session.user.id, folderId);
-  uploads = uploads.slice(0, limit);
+  if (limit) uploads = uploads.slice(0, limit);
   return NextResponse.json({ uploads });
 }

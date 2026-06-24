@@ -14,48 +14,34 @@ const WEEKLY_CHALLENGES = [
   { title: "Study 3 days in a row", desc: "Build that streak!", xp: 15, progress: 1, total: 3 },
 ];
 
-const FORMAT_SUGGESTIONS = [
-  { format: "gossip", label: "Gossip Mode", emoji: "🗣️", color: "#ec4899" },
-  { format: "podcast", label: "Podcast Mode", emoji: "🎤", color: "#f59e0b" },
-  { format: "slides", label: "Slides", emoji: "📱", color: "#3b82f6" },
-];
-
 export default function HomePage() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [userData, setUserData] = useState<{ streak: number; xp: number; name: string } | null>(null);
+  const [userData, setUserData] = useState<{ streak: number; xp: number; name: string; subjects: string[] } | null>(null);
   const [recentUploads, setRecentUploads] = useState<Upload[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (status === "unauthenticated") router.push("/");
-  }, [status, router]);
+  useEffect(() => { if (status === "unauthenticated") router.push("/"); }, [status, router]);
 
   useEffect(() => {
     if (session?.user?.id) {
-      Promise.all([
-        fetch("/api/user/profile").then(r => r.json()),
-        fetch("/api/uploads?limit=3").then(r => r.json()),
-      ]).then(([u, ups]) => {
-        setUserData(u);
-        setRecentUploads(ups.uploads || []);
-      }).catch(() => {}).finally(() => setLoading(false));
+      Promise.all([fetch("/api/user/profile"), fetch("/api/uploads?limit=3")])
+        .then(async ([uRes, upRes]) => {
+          if (uRes.ok) setUserData(await uRes.json());
+          if (upRes.ok) setRecentUploads((await upRes.json()).uploads || []);
+        })
+        .catch(() => {})
+        .finally(() => setLoading(false));
     }
   }, [session]);
 
   const firstName = session?.user?.name?.split(" ")[0] || "friend";
-  const streak = userData?.streak || 0;
   const xp = userData?.xp || 0;
+  const streak = userData?.streak || 0;
   const level = getLevel(xp);
 
-  if (loading) {
-    return (
-      <div className="p-4 space-y-4 pt-12">
-        <div className="h-8 w-48 shimmer rounded-xl" />
-        <div className="h-28 shimmer rounded-2xl" />
-        <div className="h-40 shimmer rounded-2xl" />
-      </div>
-    );
+  if (status === "loading" || loading) {
+    return <div className="p-4 space-y-4 pt-12"><div className="h-8 w-48 shimmer rounded-xl" /><div className="h-28 shimmer rounded-2xl" /></div>;
   }
 
   return (
@@ -90,7 +76,7 @@ export default function HomePage() {
           </div>
           <div className="flex-1 bg-zinc-900 border border-zinc-800 rounded-2xl p-3 flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-amber-950/50 flex items-center justify-center"><Trophy size={20} className="text-amber-400" /></div>
-            <div><p className="text-xl font-black text-amber-400">#1</p><p className="text-zinc-500 text-xs">rank</p></div>
+            <div><p className="text-xl font-black text-amber-400">#</p><p className="text-zinc-500 text-xs">leaderboard</p></div>
           </div>
         </div>
       </div>
@@ -103,7 +89,7 @@ export default function HomePage() {
           </div>
           <div className="space-y-2">
             {recentUploads.map(upload => (
-              <Link key={upload.id} href={`/study/${upload.id}`} className="flex items-center gap-3 p-3.5 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-zinc-700 transition-all active:scale-[0.99]">
+              <Link key={upload.id} href={`/study/${upload.id}`} className="flex items-center gap-3 p-3.5 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-zinc-700 transition-all">
                 <div className="w-10 h-10 rounded-xl bg-purple-950/50 flex items-center justify-center"><BookOpen size={18} className="text-purple-400" /></div>
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-sm truncate">{upload.title}</p>
@@ -127,23 +113,6 @@ export default function HomePage() {
         </section>
       )}
 
-      {recentUploads.length > 0 && (
-        <section className="px-4 mb-6">
-          <h2 className="font-bold text-sm text-zinc-300 uppercase tracking-wide mb-3">Try a new format</h2>
-          <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4">
-            {FORMAT_SUGGESTIONS.map(f => (
-              <Link key={f.format} href={`/study/${recentUploads[0]?.id}?format=${f.format}`}
-                className="flex-shrink-0 w-32 p-3 rounded-2xl border border-zinc-800 bg-zinc-900 flex flex-col items-center gap-2 hover:border-zinc-700 transition-all"
-                style={{ borderColor: `${f.color}40` }}
-              >
-                <span className="text-3xl">{f.emoji}</span>
-                <p className="text-xs font-medium text-center" style={{ color: f.color }}>{f.label}</p>
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
-
       <section className="px-4 mb-6">
         <div className="flex items-center justify-between mb-3">
           <h2 className="font-bold text-sm text-zinc-300 uppercase tracking-wide">Weekly challenges</h2>
@@ -153,15 +122,12 @@ export default function HomePage() {
           {WEEKLY_CHALLENGES.map(c => (
             <div key={c.title} className="p-4 bg-zinc-900 border border-zinc-800 rounded-2xl">
               <div className="flex items-start justify-between mb-2">
-                <div>
-                  <p className="font-semibold text-sm">{c.title}</p>
-                  <p className="text-zinc-500 text-xs mt-0.5">{c.desc}</p>
-                </div>
+                <div><p className="font-semibold text-sm">{c.title}</p><p className="text-zinc-500 text-xs mt-0.5">{c.desc}</p></div>
                 <span className="text-xs font-bold text-purple-400 bg-purple-950/50 px-2 py-0.5 rounded-full">+{c.xp} XP</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="flex-1 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
-                  <div className="h-full bg-purple-500 rounded-full transition-all" style={{ width: `${(c.progress / c.total) * 100}%` }} />
+                  <div className="h-full bg-purple-500 rounded-full" style={{ width: `${(c.progress / c.total) * 100}%` }} />
                 </div>
                 <span className="text-xs text-zinc-500">{c.progress}/{c.total}</span>
               </div>
@@ -172,12 +138,12 @@ export default function HomePage() {
 
       <section className="px-4 mb-6">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="font-bold text-sm text-zinc-300 uppercase tracking-wide"><TrendingUp size={14} className="inline mr-1" />Trending from students</h2>
+          <h2 className="font-bold text-sm text-zinc-300 uppercase tracking-wide"><TrendingUp size={14} className="inline mr-1" />Trending</h2>
           <Link href="/explore" className="text-purple-400 text-xs font-medium flex items-center gap-1">See all <ChevronRight size={12} /></Link>
         </div>
         <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4">
-          {["AP Bio Gossip 🗣️", "Calc Podcast 🎤", "Psych Slides 📱"].map((item, i) => (
-            <Link key={item} href="/explore" className="flex-shrink-0 w-40 h-28 rounded-2xl bg-zinc-900 border border-zinc-800 flex flex-col justify-end p-3 hover:border-zinc-700 transition-all overflow-hidden relative">
+          {["AP Bio Gossip 🗣️", "Calc Podcast 🎙️", "Psych Slides 📱"].map((item, i) => (
+            <Link key={item} href="/explore" className="flex-shrink-0 w-40 h-28 rounded-2xl bg-zinc-900 border border-zinc-800 flex flex-col justify-end p-3 overflow-hidden relative">
               <div className="absolute inset-0 opacity-20" style={{ background: `linear-gradient(135deg, ${["#ec4899", "#f59e0b", "#3b82f6"][i]}, transparent)` }} />
               <p className="font-semibold text-xs relative z-10">{item}</p>
               <p className="text-zinc-500 text-xs relative z-10 mt-0.5">Trending</p>

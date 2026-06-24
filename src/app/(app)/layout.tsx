@@ -10,7 +10,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    if (status === "unauthenticated") router.push("/");
+    if (status === "unauthenticated") {
+      router.push("/");
+    }
   }, [status, router]);
 
   if (status === "loading") {

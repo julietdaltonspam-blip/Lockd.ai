@@ -15,7 +15,9 @@ export async function proxy(req: NextRequest) {
     return NextResponse.next();
   }
 
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  // Must match the same fallback secret used in src/lib/auth.ts
+  const secret = process.env.NEXTAUTH_SECRET || "dev-secret-change-in-production";
+  const token = await getToken({ req, secret });
 
   if (!token) {
     return NextResponse.redirect(new URL("/", req.url));

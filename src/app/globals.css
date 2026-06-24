@@ -18,7 +18,9 @@
   --color-foreground: var(--foreground);
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   background-color: var(--background);
@@ -104,12 +106,17 @@ body {
   transform: translateY(-1px);
 }
 
-*:focus-visible { outline: 2px solid #a855f7; outline-offset: 2px; }
+*:focus-visible {
+  outline: 2px solid #a855f7;
+  outline-offset: 2px;
+}
 
 .pb-safe { padding-bottom: max(env(safe-area-inset-bottom), 16px); }
 .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+
 .no-select { -webkit-user-select: none; user-select: none; }
 
+/* Ambient backgrounds for podcast mode */
 .ambient-cafe { background: radial-gradient(ellipse at 50% 100%, #2d1a0a 0%, #0d0700 60%, #09090b 100%); }
 .ambient-fireplace { background: radial-gradient(ellipse at 50% 100%, #3d0f00 0%, #1a0500 60%, #09090b 100%); }
 .ambient-city { background: radial-gradient(ellipse at 50% 0%, #0a0a2e 0%, #050516 60%, #09090b 100%); }
